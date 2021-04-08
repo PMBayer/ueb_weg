@@ -23,7 +23,8 @@ class Window(QWidget):
         self.dim_label.setObjectName('Dimension:')
 
         # create & modify Textbox for Dimension
-        self.textbox = QLineEdit('Dimension', self)
+        self.textbox = QLineEdit()
+
         # create & modify Button for entering Dimension
         self.enter_dim = QPushButton()
         self.enter_dim.setObjectName('Enter')
