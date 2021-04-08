@@ -1,6 +1,9 @@
+#!/usr/bin/env python
+
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import *
 import sys
 
 
@@ -11,35 +14,30 @@ class Window(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        hbox = create_input_field()
+        # create & modify Hbox for Input things
+        self.hbox = QHBoxLayout()
+        self.hbox.setAlignment(Qt.AlignTop)
 
+        # create & modify Dimension Label
+        self.dim_label = QLabel()
+        self.dim_label.setObjectName('Dimension:')
+
+        # create & modify Textbox for Dimension
+        self.textbox = QLineEdit('Dimension', self)
+        # create & modify Button for entering Dimension
+        self.enter_dim = QPushButton()
+        self.enter_dim.setObjectName('Enter')
+
+        # add widgets to hbox
+        self.hbox.addWidget(self.dim_label)
+        self.hbox.addWidget(self.textbox)
+        self.hbox.addWidget(self.enter_dim)
+
+        # general init of window
         self.setLayout(hbox)
         self.setGeometry(750, 750, 800, 800)
         self.setWindowTitle('Gitterpotential Methode')
 
-
-def create_input_field():
-    # create & format HBox
-    h_box = QHBoxLayout()
-    h_box.setAlignment(Qt.AlignTop)
-
-    #create & format Button
-    input_dim = QPushButton('Enter')
-
-    # create & format Layout
-    enter_dim = QLabel('Dimension:')
-
-    # create & format input field
-    input_field = QtWidgets.QLineEdit()
-    input_field.setValidator(QtWidgets.QIntValidator())
-    input_field.setMaxLength(4)
-
-    # adding widgets to layout
-    h_box.addWidget(enter_dim)
-    h_box.addWidget(input_dialog)
-    h_box.addWidget(input_dim)
-
-    return h_box
 
 
 def create_grid(dim):
@@ -50,9 +48,6 @@ def main():
     # initialize Window
     app = QApplication(sys.argv)
     window = Window()
-
-    # add input field for dimensions
-    h_box = create_input_field()
 
     # Open Window
     window.show()
