@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 import sys
@@ -19,15 +19,13 @@ class Window(QWidget):
         self.hbox.setAlignment(Qt.AlignTop)
 
         # create & modify Dimension Label
-        self.dim_label = QLabel()
-        self.dim_label.setObjectName('Dimension:')
+        self.dim_label = QLabel('Dimension: ')
 
         # create & modify Textbox for Dimension
-        self.textbox = QLineEdit()
+        self.textbox = QLineEdit(self)
 
         # create & modify Button for entering Dimension
-        self.enter_dim = QPushButton()
-        self.enter_dim.setObjectName('Enter')
+        self.enter_dim = QPushButton('Enter')
 
         # add widgets to hbox
         self.hbox.addWidget(self.dim_label)
@@ -35,7 +33,7 @@ class Window(QWidget):
         self.hbox.addWidget(self.enter_dim)
 
         # general init of window
-        self.setLayout(hbox)
+        self.setLayout(self.hbox)
         self.setGeometry(750, 750, 800, 800)
         self.setWindowTitle('Gitterpotential Methode')
 
