@@ -39,7 +39,6 @@ class Window(QWidget):
         self.setWindowTitle('Gitterpotential Methode')
 
 
-
 def create_grid(dim):
     pass
 
