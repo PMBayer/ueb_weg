@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit, QGridLayout
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 import sys
@@ -37,10 +37,6 @@ class Window(QWidget):
         self.setLayout(self.hbox)
         self.setGeometry(750, 750, 800, 800)
         self.setWindowTitle('Gitterpotential Methode')
-
-
-def create_grid(dim):
-    pass
 
 
 def main():
