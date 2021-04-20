@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit, QGridLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit, \
+    QGridLayout, QVBoxLayout
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 import sys
@@ -15,8 +16,10 @@ class Window(QWidget):
 
     def init_ui(self):
         # create & modify Hbox for Input things
+        self.vbox = QVBoxLayout()
         self.hbox = QHBoxLayout()
         self.hbox.setAlignment(Qt.AlignTop)
+        self.vbox.addLayout(self.hbox)
 
         # create & modify Dimension Label
         self.dim_label = QLabel('Dimension: ')
@@ -27,6 +30,7 @@ class Window(QWidget):
 
         # create & modify Button for entering Dimension
         self.enter_dim = QPushButton('Enter')
+        self.enter_dim.clicked.connect(self.click_enter)
 
         # add widgets to hbox
         self.hbox.addWidget(self.dim_label)
@@ -34,9 +38,23 @@ class Window(QWidget):
         self.hbox.addWidget(self.enter_dim)
 
         # general init of window
-        self.setLayout(self.hbox)
+        self.setLayout(self.vbox)
         self.setGeometry(750, 750, 800, 800)
         self.setWindowTitle('Gitterpotential Methode')
+
+    def click_enter(self):
+        grid = QGridLayout()
+        grid.setAlignment(Qt.AlignCenter)
+        grid.setSpacing(0)
+        grid.setVerticalSpacing(0)
+        
+        for row in self.textbox.text():
+            for column in self.textbox.text():
+                button = QPushButton('')
+                button.setGeometry(50, 50, 50, 50)
+                grid.addWidget(button)
+
+        self.vbox.addLayout(grid)
 
 
 def main():
