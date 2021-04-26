@@ -2,7 +2,7 @@
 
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit, \
-    QVBoxLayout, QGridLayout
+    QVBoxLayout, QGridLayout, QSpinBox
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 import sys
@@ -24,13 +24,12 @@ class Window(QWidget):
         self.column_label = QLabel('Columns: ')
 
         # create & modify Textbox for Dimension
-        self.rows_input = QLineEdit()
-        self.column_input = QLineEdit()
-        self.rows_input.setValidator(QIntValidator())
-        self.column_input.setValidator(QIntValidator())
+        self.rows_input = QSpinBox()
+        self.column_input = QSpinBox()
 
         # create & modify Button for entering Dimension
         self.enter_dim = QPushButton('Enter')
+        self.enter_dim.clicked.connect(self.click_enter)
 
         # add widgets to hbox
         self.hbox1.addWidget(self.rows_label)
@@ -53,7 +52,7 @@ class Window(QWidget):
         self.hbox2.addWidget(self.dest_point)
         self.hbox2.addWidget(self.find_path)
 
-        #add every layout to vbox
+        # add every layout to vbox
         self.vbox.addLayout(self.hbox1)
         self.vbox.addLayout(self.grid)
         self.vbox.addLayout(self.hbox2)
@@ -63,9 +62,17 @@ class Window(QWidget):
         self.setGeometry(750, 750, 800, 800)
         self.setWindowTitle('Gitterpotential Methode')
 
+    def create_grid(self):
+        i =1
 
-def create_grid(dim):
-    pass
+        for row in range(self.rows_input.value()):
+            for column in range(self.column_input.value()):
+                button = QPushButton(str(i))
+                self.grid.addWidget(button, row+1, column)
+                i += 1
+
+    def click_enter(self):
+        self.create_grid()
 
 
 def main():
