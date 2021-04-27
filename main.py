@@ -51,17 +51,17 @@ class Window(QWidget):
 
         self.obstacle = QPushButton('Obstacle')
         self.obstacle.clicked.connect(self.click_obstacle)
-        self.start_point = QPushButton('Start')
-        self.start_point.clicked.connect(self.click_start)
         self.dest_point = QPushButton('Destination')
         self.dest_point.clicked.connect(self.click_dest)
+        self.start_point = QPushButton('Start')
+        self.start_point.clicked.connect(self.click_start)
         self.find_path = QPushButton('Path')
         self.find_path.clicked.connect(self.click_path)
 
         # adding buttons to Layout
         self.hbox2.addWidget(self.obstacle)
-        self.hbox2.addWidget(self.start_point)
         self.hbox2.addWidget(self.dest_point)
+        self.hbox2.addWidget(self.start_point)
         self.hbox2.addWidget(self.find_path)
 
         # add every layout to vbox
@@ -79,14 +79,15 @@ class Window(QWidget):
         if 11 > self.rows_input.value() > 2 and 11 > self.column_input.value() > 2:
             for row in range(self.rows_input.value()):
                 for column in range(self.column_input.value()):
-                    coord = [row+1, column+1]
+                    coord = [row + 1, column + 1]
                     button = QPushButton(str(coord))
+                    button.setCheckable(True)
                     button.setMinimumSize(QSize(50, 50))
                     button.setMaximumSize(QSize(50, 50))
                     self.coords.append(coord)
                     print(coord)
-                    self.grid.addWidget(button, row+1, column+1)
-                    button.clicked.connect(lambda: self.click_grid(coord))
+                    self.grid.addWidget(button, row + 1, column + 1)
+                    button.clicked.connect(lambda: self.click_grid())
                     i += 1
         else:
             errors.grid_out_of_bounds_error()
@@ -116,27 +117,52 @@ class Window(QWidget):
     def click_path(self):
         pass
 
-    def click_grid(self, coord):
+    def click_grid(self):
 
         if self.obstacle == True:
-            print('Set obstacle at: ' + str(coord))
-            button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
-            button.setStyleSheet("background-color: grey")
-            button.setText("Obstacle")
+            for index in range(len(self.coords)):
+                coord = self.coords[index]
+                print('loopin shit')
+                if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
+                    print('r u doin sumthin')
+                    print('Set obstacle at: ' + str(coord))
+                    button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
+                    button.setStyleSheet("background-color: grey")
+                    button.setText("Obstacle")
+                    break
 
         if self.start == True:
-            print('Set start at: ' + str(coord))
-            button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
-            button.setStyleSheet("background-color: Green")
-            button.setText("Start")
+            for index in range(len(self.coords)):
+                coord = self.coords[index]
+                print('loopin shit')
+                if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
+                    print('r u doin sumthin')
+                    print('Set obstacle at: ' + str(coord))
+                    button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
+                    button.setStyleSheet("background-color: Green")
+                    button.setText("Start")
+                    break
 
         if self.destination == True:
-            print('Set destination at: ' + str(coord))
+            for index in range(len(self.coords)):
+                coord = self.coords[index]
+                if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
+                    print('Set obstacle at: ' + str(coord))
+                    button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
+                    button.setStyleSheet("background-color: Green")
+                    button.setText(str(0))
+                    break
+
+    def assign_button_number(self):
+        # find start - e.g. find 0 in Grid
+        for index in range(len(self.coords)):
+            coord = self.coords[index]
             button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
-            button.setStyleSheet("background-color: Green")
-            button.setText("Destination")
+            if button.text() == str(0):
+                dest_coord = coord
+                print('This is the destination Coord: ' + str(dest_coord))
 
-
+        # calculate surrounding numbers
 
 
 
