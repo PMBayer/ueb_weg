@@ -89,7 +89,7 @@ class Window(QWidget):
                     button.clicked.connect(lambda: self.click_grid(coord))
                     i += 1
         else:
-            errors.grid_out_of_bounds()
+            errors.grid_out_of_bounds_error()
 
     # Events
     def click_enter(self):
