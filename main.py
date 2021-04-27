@@ -2,7 +2,7 @@
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit, \
     QVBoxLayout, QGridLayout, QSpinBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import *
 import sys
 
@@ -10,10 +10,11 @@ import errors
 
 
 class Window(QWidget):
+    # Globals
     obstacle = False
     start = False
     destination = False
-    btn_array = []
+    coords = []
 
     def __init__(self):
         super().__init__()
@@ -45,9 +46,10 @@ class Window(QWidget):
 
         self.vbox = QVBoxLayout()
         self.grid = QGridLayout()
+        self.grid.setColumnStretch(0, 0)
         self.hbox2 = QHBoxLayout()
 
-        self.obstacle = QPushButton('Block')
+        self.obstacle = QPushButton('Obstacle')
         self.obstacle.clicked.connect(self.click_obstacle)
         self.start_point = QPushButton('Start')
         self.start_point.clicked.connect(self.click_start)
@@ -69,28 +71,27 @@ class Window(QWidget):
 
         # general init of window
         self.setLayout(self.vbox)
-        self.setGeometry(750, 750, 800, 800)
         self.setWindowTitle('Gitterpotential Methode')
 
     def create_grid(self):
         i = 0
 
-        if 10 > self.rows_input.value() > 3 and 10 > self.column_input.value() > 3:
+        if 11 > self.rows_input.value() > 2 and 11 > self.column_input.value() > 2:
             for row in range(self.rows_input.value()):
                 for column in range(self.column_input.value()):
-                    button = QPushButton(str(i))
-                    self.btn_array.append(button)
-                    button.clicked.connect(lambda: self.click_grid(button))
-                    self.grid.addWidget(button, row + 1, column)
+                    coord = [row+1, column+1]
+                    button = QPushButton(str(coord))
+                    button.setMinimumSize(QSize(50, 50))
+                    button.setMaximumSize(QSize(50, 50))
+                    self.coords.append(coord)
+                    print(coord)
+                    self.grid.addWidget(button, row+1, column+1)
+                    button.clicked.connect(lambda: self.click_grid(coord))
                     i += 1
         else:
             errors.grid_out_of_bounds()
 
-
-
-
     # Events
-
     def click_enter(self):
         self.create_grid()
 
@@ -98,32 +99,45 @@ class Window(QWidget):
         self.obstacle = True
         self.start = False
         self.destination = False
+        print('Setting obstacles...')
 
     def click_start(self):
         self.start = True
         self.obstacle = False
         self.destination = False
+        print('Setting start point...')
 
     def click_dest(self):
         self.destination = True
         self.obstacle = False
         self.start = False
+        print('Setting destination...')
 
     def click_path(self):
         pass
 
-    def click_grid(self, button):
-        if self.obstacle:
+    def click_grid(self, coord):
+
+        if self.obstacle == True:
+            print('Set obstacle at: ' + str(coord))
+            button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
             button.setStyleSheet("background-color: grey")
             button.setText("Obstacle")
 
-        if self.start:
+        if self.start == True:
+            print('Set start at: ' + str(coord))
+            button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
             button.setStyleSheet("background-color: Green")
             button.setText("Start")
 
-        if self.destination:
+        if self.destination == True:
+            print('Set destination at: ' + str(coord))
+            button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
             button.setStyleSheet("background-color: Green")
             button.setText("Destination")
+
+
+
 
 
 def main():
