@@ -6,6 +6,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import *
 import sys
 
+import errors
+
 
 class Window(QWidget):
     obstacle = False
@@ -73,13 +75,19 @@ class Window(QWidget):
     def create_grid(self):
         i = 0
 
-        for row in range(self.rows_input.value()):
-            for column in range(self.column_input.value()):
-                button = QPushButton(str(i))
-                self.btn_array.append(button)
-                button.clicked.connect(lambda: self.click_grid(button))
-                self.grid.addWidget(button, row + 1, column)
-                i += 1
+        if 10 > self.rows_input.value() > 3 and 10 > self.column_input.value() > 3:
+            for row in range(self.rows_input.value()):
+                for column in range(self.column_input.value()):
+                    button = QPushButton(str(i))
+                    self.btn_array.append(button)
+                    button.clicked.connect(lambda: self.click_grid(button))
+                    self.grid.addWidget(button, row + 1, column)
+                    i += 1
+        else:
+            errors.grid_out_of_bounds()
+
+
+
 
     # Events
 
