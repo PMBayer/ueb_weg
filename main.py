@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit, \
     QVBoxLayout, QGridLayout, QSpinBox
 from PyQt5.QtCore import Qt
@@ -9,6 +8,10 @@ import sys
 
 
 class Window(QWidget):
+    obstacle = False
+    start = False
+    destination = False
+    btn_array = []
 
     def __init__(self):
         super().__init__()
@@ -40,14 +43,19 @@ class Window(QWidget):
 
         self.vbox = QVBoxLayout()
         self.grid = QGridLayout()
-
         self.hbox2 = QHBoxLayout()
 
-        self.blockade = QPushButton('Block')
+        self.obstacle = QPushButton('Block')
+        self.obstacle.clicked.connect(self.click_obstacle)
         self.start_point = QPushButton('Start')
+        self.start_point.clicked.connect(self.click_start)
         self.dest_point = QPushButton('Destination')
+        self.dest_point.clicked.connect(self.click_dest)
         self.find_path = QPushButton('Path')
-        self.hbox2.addWidget(self.blockade)
+        self.find_path.clicked.connect(self.click_path)
+
+        # adding buttons to Layout
+        self.hbox2.addWidget(self.obstacle)
         self.hbox2.addWidget(self.start_point)
         self.hbox2.addWidget(self.dest_point)
         self.hbox2.addWidget(self.find_path)
@@ -63,16 +71,51 @@ class Window(QWidget):
         self.setWindowTitle('Gitterpotential Methode')
 
     def create_grid(self):
-        i =1
+        i = 0
 
         for row in range(self.rows_input.value()):
             for column in range(self.column_input.value()):
                 button = QPushButton(str(i))
-                self.grid.addWidget(button, row+1, column)
+                self.btn_array.append(button)
+                button.clicked.connect(lambda: self.click_grid(button))
+                self.grid.addWidget(button, row + 1, column)
                 i += 1
+
+    # Events
 
     def click_enter(self):
         self.create_grid()
+
+    def click_obstacle(self):
+        self.obstacle = True
+        self.start = False
+        self.destination = False
+
+    def click_start(self):
+        self.start = True
+        self.obstacle = False
+        self.destination = False
+
+    def click_dest(self):
+        self.destination = True
+        self.obstacle = False
+        self.start = False
+
+    def click_path(self):
+        pass
+
+    def click_grid(self, button):
+        if self.obstacle:
+            button.setStyleSheet("background-color: grey")
+            button.setText("Obstacle")
+
+        if self.start:
+            button.setStyleSheet("background-color: Green")
+            button.setText("Start")
+
+        if self.destination:
+            button.setStyleSheet("background-color: Green")
+            button.setText("Destination")
 
 
 def main():
