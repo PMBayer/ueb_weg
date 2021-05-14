@@ -15,6 +15,8 @@ class Window(QWidget):
     start = False
     destination = False
     coords = []
+    start_coord = []
+    desti_coord = []
 
     def __init__(self):
         super().__init__()
@@ -79,14 +81,15 @@ class Window(QWidget):
         if 11 > self.rows_input.value() > 2 and 11 > self.column_input.value() > 2:
             for row in range(self.rows_input.value()):
                 for column in range(self.column_input.value()):
-                    coord = [row + 1, column + 1]
-                    button = QPushButton(str(coord))
+                    value = 0
+                    coord = [row, column, value]
+                    button = QPushButton()      #str(coord)
                     button.setCheckable(True)
                     button.setMinimumSize(QSize(50, 50))
                     button.setMaximumSize(QSize(50, 50))
                     self.coords.append(coord)
                     print(coord)
-                    self.grid.addWidget(button, row + 1, column + 1)
+                    self.grid.addWidget(button, row, column)
                     button.clicked.connect(lambda: self.click_grid())
                     i += 1
         else:
@@ -139,31 +142,54 @@ class Window(QWidget):
                     print('r u doin sumthin')
                     print('Set obstacle at: ' + str(coord))
                     button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
-                    button.setStyleSheet("background-color: Green")
-                    button.setText("Start")
+                    button.setStyleSheet("background-color: Red")
+                    self.start_coord = coord
                     break
 
         if self.destination == True:
             for index in range(len(self.coords)):
                 coord = self.coords[index]
                 if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
+                    coord[2] = 0
                     print('Set obstacle at: ' + str(coord))
                     button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
                     button.setStyleSheet("background-color: Green")
-                    button.setText(str(0))
+                    button.setText(str(coord[2]))
+                    self.calc_button_numbers(coord)
                     break
 
-    def assign_button_number(self):
-        # find start - e.g. find 0 in Grid
-        for index in range(len(self.coords)):
-            coord = self.coords[index]
-            button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
-            if button.text() == str(0):
-                dest_coord = coord
-                print('This is the destination Coord: ' + str(dest_coord))
+    def calc_button_numbers(self, coord):
+        print('Called calc_button numbers')
+        #coord[0] -> x Coord; coord[1] -> y Coord; coord[3] -> Value
+        surrounding = [[coord[0]-1, coord[1], coord[2]],
+                       [coord[0]+1, coord[1], coord[2]],
+                       [coord[0], coord[1]-1, coord[2]],
+                       [coord[0], coord[1]+1, coord[2]]]
 
-        # calculate surrounding numbers
+        mid_btn_value = coord[2]
 
+        for cell in range(len(surrounding)):
+            print('entered Loop for surroundings')
+            chosen_cell = surrounding[cell]
+            if 0 <= chosen_cell[0] <= self.rows_input.value()-1 and 0 <= chosen_cell[1] <= self.column_input.value()-1:
+                button_of_cell = self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget()
+
+                if button_of_cell.text() == '':
+                    print('entered if statements')
+                    chosen_cell[2] += 1
+                    coord[2] = chosen_cell[2]
+                    button_of_cell.setText(str(mid_btn_value+1))
+                    self.calc_button_numbers(chosen_cell)
+                else:
+                    break
+
+
+
+
+
+
+    def find_shortest_path(self, x):
+        pass
 
 
 def main():
