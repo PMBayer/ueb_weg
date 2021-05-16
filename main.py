@@ -83,7 +83,7 @@ class Window(QWidget):
                 for column in range(self.column_input.value()):
                     value = 0
                     coord = [row, column, value]
-                    button = QPushButton()      #str(coord)
+                    button = QPushButton()  # str(coord)
                     button.setCheckable(True)
                     button.setMinimumSize(QSize(50, 50))
                     button.setMaximumSize(QSize(50, 50))
@@ -160,36 +160,36 @@ class Window(QWidget):
 
     def calc_button_numbers(self, coord):
         print('Called calc_button numbers')
-        #coord[0] -> x Coord; coord[1] -> y Coord; coord[3] -> Value
-        surrounding = [[coord[0]-1, coord[1], coord[2]],
-                       [coord[0]+1, coord[1], coord[2]],
-                       [coord[0], coord[1]-1, coord[2]],
-                       [coord[0], coord[1]+1, coord[2]]]
+        # coord[0] -> x Coord; coord[1] -> y Coord; coord[3] -> Value
+        surrounding = [[coord[0] - 1, coord[1], coord[2]],
+                       [coord[0] + 1, coord[1], coord[2]],
+                       [coord[0], coord[1] - 1, coord[2]],
+                       [coord[0], coord[1] + 1, coord[2]]]
 
         mid_btn_value = coord[2]
 
         for cell in range(len(surrounding)):
             print('entered Loop for surroundings')
             chosen_cell = surrounding[cell]
-            if 0 <= chosen_cell[0] <= self.rows_input.value()-1 and 0 <= chosen_cell[1] <= self.column_input.value()-1:
+            if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[1] <= self.column_input.value() - 1:
+
                 button_of_cell = self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget()
 
                 if button_of_cell.text() == '':
                     print('entered if statements')
                     chosen_cell[2] += 1
                     coord[2] = chosen_cell[2]
-                    button_of_cell.setText(str(mid_btn_value+1))
+                    button_of_cell.setText(str(mid_btn_value + 1))
                     self.calc_button_numbers(chosen_cell)
                 else:
-                    break
-
-
-
-
+                    continue
+            else:
+                continue
 
 
     def find_shortest_path(self, x):
         pass
+
 
 
 def main():
