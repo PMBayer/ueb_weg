@@ -9,6 +9,9 @@ import sys
 import errors
 
 
+sys.setrecursionlimit(10000)
+
+
 class Window(QWidget):
     # Globals
     obstacle = False
@@ -118,7 +121,7 @@ class Window(QWidget):
         print('Setting destination...')
 
     def click_path(self):
-        pass
+        self.find_shortest_path(self.start_coord)
 
     def click_grid(self):
 
@@ -140,10 +143,12 @@ class Window(QWidget):
                 print('loopin shit')
                 if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
                     print('r u doin sumthin')
-                    print('Set obstacle at: ' + str(coord))
+                    print('Set start at: ' + str(coord))
                     button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
                     button.setStyleSheet("background-color: Red")
-                    self.start_coord = coord
+                    self.start_coord.append(coord[0])
+                    self.start_coord.append(coord[1])
+                    print('Start: ' + str(self.start_coord))
                     break
 
         if self.destination == True:
@@ -151,10 +156,13 @@ class Window(QWidget):
                 coord = self.coords[index]
                 if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
                     coord[2] = 0
-                    print('Set obstacle at: ' + str(coord))
+                    print('Set destination at: ' + str(coord))
                     button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
                     button.setStyleSheet("background-color: Green")
                     button.setText(str(coord[2]))
+                    self.desti_coord.append(coord[0])
+                    self.desti_coord.append(coord[1])
+                    print('Destination: ' + str(self.desti_coord))
                     self.calc_button_numbers(coord)
                     break
 
@@ -171,7 +179,8 @@ class Window(QWidget):
         for cell in range(len(surrounding)):
             print('entered Loop for surroundings')
             chosen_cell = surrounding[cell]
-            if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[1] <= self.column_input.value() - 1:
+            if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[
+                1] <= self.column_input.value() - 1:
 
                 button_of_cell = self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget()
 
@@ -186,10 +195,42 @@ class Window(QWidget):
             else:
                 continue
 
+    def find_shortest_path(self, coord):
+        surrounding = [[coord[0] - 1, coord[1]],  # links
+                       [coord[0] + 1, coord[1]],  # rechts
+                       [coord[0], coord[1] - 1],  # unter
+                       [coord[0], coord[1] + 1],  # oben
+                       [coord[0] + 1, coord[1] + 1],  # oben Rechts
+                       [coord[0] - 1, coord[1] + 1],  # oben Links
+                       [coord[0] - 1, coord[1] - 1],  # unten Links
+                       [coord[0] + 1, coord[1] - 1]]  # unten Rechts
 
-    def find_shortest_path(self, x):
-        pass
+        values = []
 
+        #get list of values
+        for cell in range(len(surrounding)):
+            chosen_cell = surrounding[cell]
+            if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[1] <= self.column_input.value() - 1:
+                button_of_cell = self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget()
+
+                if button_of_cell.text() == 'Obstacle':
+                    continue
+                else:
+                    value = int(button_of_cell.text())
+                    values.append(value)
+
+        values.sort()
+        if values[0] == 0:
+            print('Pathfinding complete')
+
+        for cell in range(len(surrounding)):
+            chosen_cell = surrounding[cell]
+            if self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget().text() == str(values[0]):
+                self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget().setStyleSheet("background-color: Green")
+                self.find_shortest_path(chosen_cell)
+                break
+            else:
+                continue
 
 
 def main():
