@@ -21,3 +21,5 @@ def cant_find_path_error():
     error_dialog.setWindowTitle('Error!')
 
     error_dialog.exec_()
+
+

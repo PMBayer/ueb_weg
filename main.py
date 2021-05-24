@@ -9,8 +9,7 @@ import sys
 import errors
 
 
-sys.setrecursionlimit(10000)
-
+# sys.setrecursionlimit(10000)
 
 class Window(QWidget):
     # Globals
@@ -207,10 +206,11 @@ class Window(QWidget):
 
         values = []
 
-        #get list of values
+        # get list of values
         for cell in range(len(surrounding)):
             chosen_cell = surrounding[cell]
-            if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[1] <= self.column_input.value() - 1:
+            if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[
+                1] <= self.column_input.value() - 1:
                 button_of_cell = self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget()
 
                 if button_of_cell.text() == 'Obstacle':
@@ -222,15 +222,20 @@ class Window(QWidget):
         values.sort()
         if values[0] == 0:
             print('Pathfinding complete')
-
-        for cell in range(len(surrounding)):
-            chosen_cell = surrounding[cell]
-            if self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget().text() == str(values[0]):
-                self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget().setStyleSheet("background-color: Green")
-                self.find_shortest_path(chosen_cell)
-                break
-            else:
-                continue
+            self.grid.itemAtPosition(self.start_coord[0], self.start_coord[1]).widget().setStyleSheet(
+                "background-color: Green")
+            self.grid.itemAtPosition(self.desti_coord[0], self.desti_coord[1]).widget().setStyleSheet(
+                "background-color: Green")
+        else:
+            for cell in range(len(surrounding)):
+                chosen_cell = surrounding[cell]
+                if self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget().text() == str(values[0]):
+                    self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget().setStyleSheet(
+                        "background-color: Green")
+                    self.find_shortest_path(chosen_cell)
+                    break
+                else:
+                    continue
 
 
 def main():
