@@ -1,15 +1,11 @@
 #!/usr/bin/env python
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QHBoxLayout, QWidget, QLineEdit, \
-    QVBoxLayout, QGridLayout, QSpinBox
+from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QHBoxLayout, QWidget, QVBoxLayout, QGridLayout, QSpinBox
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import *
 import sys
 
 import errors
-
-
-#sys.setrecursionlimit(10000)
 
 class Window(QWidget):
     # Globals
@@ -127,9 +123,7 @@ class Window(QWidget):
         if self.obstacle == True:
             for index in range(len(self.coords)):
                 coord = self.coords[index]
-                print('loopin shit')
                 if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
-                    print('r u doin sumthin')
                     print('Set obstacle at: ' + str(coord))
                     button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
                     button.setStyleSheet("background-color: grey")
@@ -139,9 +133,7 @@ class Window(QWidget):
         if self.start == True:
             for index in range(len(self.coords)):
                 coord = self.coords[index]
-                print('loopin shit')
                 if self.grid.itemAtPosition(coord[0], coord[1]).widget().isChecked():
-                    print('r u doin sumthin')
                     print('Set start at: ' + str(coord))
                     button = self.grid.itemAtPosition(coord[0], coord[1]).widget()
                     button.setStyleSheet("background-color: Red")
@@ -167,8 +159,6 @@ class Window(QWidget):
                     break
 
     def calc_button_numbers(self, coord):
-        #print('Called calc_button numbers')
-        # coord[0] -> x Coord; coord[1] -> y Coord; coord[2] -> Value
         surrounding = [[coord[0] - 1, coord[1]],
                        [coord[0] + 1, coord[1]],
                        [coord[0], coord[1] - 1],
@@ -177,26 +167,18 @@ class Window(QWidget):
         mid_btn_value = coord[2]
 
         for cell in range(len(surrounding)):
-            #print('entered Loop for surroundings')
             chosen_cell = surrounding[cell]
             real_value = self.getCoordValue(chosen_cell)
             chosen_cell.append(real_value)
-            #print(chosen_cell[2])
 
             if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[1] <= self.column_input.value() - 1:
-                #print('got chosen cell')
                 button_of_cell = self.grid.itemAtPosition(chosen_cell[0], chosen_cell[1]).widget()
-                #print(coord)
-                #print(chosen_cell)
                 if chosen_cell[2] == 1000 or coord[2] < chosen_cell[2]:
-                    #print('entered frist if')
                     if button_of_cell.text() != 'Obstacle':
-                        #print('entered if statements')
                         chosen_cell[2] = coord[2] + 1
                         self.setGlobalCoordValue(chosen_cell)
                         button_of_cell.setText(str(mid_btn_value + 1))
                         self.calc_button_numbers(chosen_cell)
-
 
     def getCoordValue(self, coord):
         for i in range(len(self.coords)):
