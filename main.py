@@ -81,12 +81,11 @@ class Window(QWidget):
                 for column in range(self.column_input.value()):
                     value = 1000
                     coord = [row, column, value]
-                    button = QPushButton()  # str(coord)
+                    button = QPushButton()
                     button.setCheckable(True)
                     button.setMinimumSize(QSize(50, 50))
                     button.setMaximumSize(QSize(50, 50))
                     self.coords.append(coord)
-                    print(coord)
                     self.grid.addWidget(button, row, column)
                     button.clicked.connect(lambda: self.click_grid())
                     i += 1
@@ -168,7 +167,7 @@ class Window(QWidget):
 
         for cell in range(len(surrounding)):
             chosen_cell = surrounding[cell]
-            real_value = self.getCoordValue(chosen_cell)
+            real_value = self.getGlobalCoordValue(chosen_cell)
             chosen_cell.append(real_value)
 
             if 0 <= chosen_cell[0] <= self.rows_input.value() - 1 and 0 <= chosen_cell[1] <= self.column_input.value() - 1:
@@ -180,7 +179,7 @@ class Window(QWidget):
                         button_of_cell.setText(str(mid_btn_value + 1))
                         self.calc_button_numbers(chosen_cell)
 
-    def getCoordValue(self, coord):
+    def getGlobalCoordValue(self, coord):
         for i in range(len(self.coords)):
             coords2 = self.coords[i]
             if coords2[0] == coord[0] and coords2[1] == coord[1]:
