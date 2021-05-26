@@ -193,14 +193,14 @@ class Window(QWidget):
                 self.coords[i] = coord
 
     def find_shortest_path(self, coord):
-        surrounding = [[coord[0] - 1, coord[1]],  # links
-                       [coord[0] + 1, coord[1]],  # rechts
-                       [coord[0], coord[1] - 1],  # unter
-                       [coord[0], coord[1] + 1],  # oben
-                       [coord[0] + 1, coord[1] + 1],  # oben Rechts
-                       [coord[0] - 1, coord[1] + 1],  # oben Links
-                       [coord[0] - 1, coord[1] - 1],  # unten Links
-                       [coord[0] + 1, coord[1] - 1]]  # unten Rechts
+        surrounding = [[coord[0] - 1, coord[1]],
+                       [coord[0] + 1, coord[1]],
+                       [coord[0], coord[1] - 1],
+                       [coord[0], coord[1] + 1],
+                       [coord[0] + 1, coord[1] + 1],
+                       [coord[0] - 1, coord[1] + 1],
+                       [coord[0] - 1, coord[1] - 1],
+                       [coord[0] + 1, coord[1] - 1]]
 
         values = []
 
